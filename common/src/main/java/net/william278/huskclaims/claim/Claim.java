@@ -159,6 +159,13 @@ public class Claim implements Highlightable {
     @SerializedName("creation_time")
     private String creationTime;
 
+    /**
+     * Generic key-value metadata store for third-party plugins to attach persistent data to a claim.
+     */
+    @Expose
+    @SerializedName("metadata")
+    private Map<String, String> metadata;
+
     protected Claim(@Nullable UUID owner, @NotNull Region region, @NotNull ConcurrentMap<UUID, String> users,
                     @NotNull ConcurrentMap<String, String> groups, @NotNull ConcurrentMap<String, String> tags,
                     @NotNull ConcurrentMap<UUID, UUID> bannedUsers, @NotNull Set<Claim> children, boolean inheritParent,
@@ -174,6 +181,7 @@ public class Claim implements Highlightable {
         this.inheritParent = inheritParent;
         this.creationTime = OffsetDateTime.now().toString();
         this.privateClaim = privateClaim;
+        this.metadata = Maps.newConcurrentMap();
         children.forEach(child -> child.setParent(this));
     }
 
@@ -562,6 +570,24 @@ public class Claim implements Highlightable {
     @NotNull
     public Optional<OffsetDateTime> getCreationTime() {
         return Optional.ofNullable(creationTime).map(OffsetDateTime::parse);
+    }
+
+    /**
+     * Get the mutable generic metadata store for this claim.
+     * <p>
+     * Third-party plugins may use this to attach persistent key-value data that travels with the claim through
+     * resizes, transfers, deletions and cross-server synchronisation. Mutating the returned map and then persisting
+     * the {@link ClaimWorld} (e.g. via the API) will save the changes.
+     *
+     * @return the mutable metadata map
+     * @since 1.5
+     */
+    @NotNull
+    public Map<String, String> getMetadata() {
+        if (metadata == null) {
+            metadata = Maps.newConcurrentMap();
+        }
+        return metadata;
     }
 
     @NotNull
