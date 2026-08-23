@@ -41,8 +41,6 @@ public interface ClaimsToolHandler {
         final Position position = (Position) opPosition;
         final Optional<ClaimWorld> optionalWorld = getPlugin().getClaimWorld(position.getWorld());
         if (optionalWorld.isEmpty()) {
-            getPlugin().getLocales().getLocale("world_not_claimable")
-                    .ifPresent(user::sendMessage);
             return;
         }
         getPlugin().runAsync(() -> getPlugin().handleSelection(user, optionalWorld.get(), position));
