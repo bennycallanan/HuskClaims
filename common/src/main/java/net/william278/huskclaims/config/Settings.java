@@ -36,6 +36,7 @@ import net.william278.huskclaims.util.BlockProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("FieldMayBeFinal")
 @Getter
@@ -307,7 +308,9 @@ public final class Settings {
         }
 
         public boolean isWorldUnclaimable(@NotNull World world) {
-            return unclaimableWorlds.stream().anyMatch(world.getName()::equalsIgnoreCase);
+            return unclaimableWorlds.stream().anyMatch(pattern -> world.getName().matches(
+                    "(?i)" + Pattern.quote(pattern).replace("*", "\\E.*\\Q")
+            ));
         }
 
         @NotNull
