@@ -132,6 +132,7 @@ claims:
     - redstone_actuate
     - player_damage_player
   # List of worlds where users cannot claim
+  # Supports wildcards (e.g. "speedrun_*")
   unclaimable_worlds: []
   # The number of claim blocks a user gets when they first join the server
   starting_claim_blocks: 100

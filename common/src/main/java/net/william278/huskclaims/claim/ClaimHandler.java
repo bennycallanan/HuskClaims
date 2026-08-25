@@ -147,6 +147,11 @@ public interface ClaimHandler extends Handler {
         return !(claim1.isEmpty() && claim2.isEmpty());
     }
 
+    @Override
+    default boolean handleInspection(@NotNull OperationPosition position) {
+        return getClaimWorld((World) position.getWorld()).isPresent();
+    }
+
     // Checks if the outcome of an operation is being ignored by its involved user
     private boolean isOperationIgnored(@NotNull Operation operation) {
         return operation.getUser().map(user -> {
