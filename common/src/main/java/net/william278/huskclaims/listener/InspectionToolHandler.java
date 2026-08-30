@@ -57,8 +57,6 @@ public interface InspectionToolHandler {
         // Check that the world is claimable
         final Optional<ClaimWorld> optionalWorld = getPlugin().getClaimWorld(position.getWorld());
         if (optionalWorld.isEmpty()) {
-            getPlugin().getLocales().getLocale("world_not_claimable")
-                    .ifPresent(user::sendMessage);
             return;
         }
         final ClaimWorld claimWorld = optionalWorld.get();
